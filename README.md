@@ -1,6 +1,6 @@
 # streamlit-lab-ia
 
-## Integrantes Equipo #4:
+## Integrantes Equipo:
 
 - Yuluka Gigante Muriel 
 
