@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import joblib
+import matplotlib.pyplot as plt
 
 st.title('Spaceship Titanic predictor')
 
@@ -11,7 +12,7 @@ def load_model():
     return loaded_model
 
 def load_data():
-    df = pd.read_csv("data/test.csv")
+    df = pd.read_csv("data/train.csv")
     return df
 
 model = load_model()
@@ -21,8 +22,17 @@ with st.expander("Data"):
     st.write("Datos de entrenamiento:")
     st.write(data.head())
 
-with st.expander("Pestaña 2"):
-    st.write("Contenido de la Pestaña 2")
+with st.expander("EDA"):
+    fig_data = data.dropna(subset='HomePlanet')
+    fig_data = fig_data.groupby(['HomePlanet', 'Transported']).size().unstack().reset_index()
+    
+    data_long = pd.melt(fig_data, id_vars='HomePlanet', var_name='Transportado', value_name='Cantidad')
+    fig = sns.barplot(data=data_long, x='HomePlanet', y='Cantidad', hue='Transportado')
+    plt.xlabel('Planeta')
+    plt.ylabel('Cantidad de Pasajeros')
+    plt.title('Cantidad de Pasajeros Transportados vs No Transportados por Planeta')
+    
+    st.pyplot(fig.figure)
 
 with st.expander("Inferencia"):
     st.text("Inputs para modelo")
@@ -52,4 +62,4 @@ with st.expander("Inferencia"):
         }
         ))
         
-        st.text("La predicción dle modelo es: {}".format(result))
+        st.text("La predicción del modelo es: {}".format(result))
